@@ -4,7 +4,7 @@ Nix-packaged profiles and wrapper commands for [nono](https://nono.sh).
 
 The profiles are plain JSON in `profiles/`. The flake exposes:
 
-- a generic `mkNonoBox` wrapper builder, in the spirit of bubblebox's `mkBubblebox`
+- a generic `mkNonoBox` wrapper builder
 - `nonocode` and `nonoclaude`, two concrete wrappers
 - an overlay with `nonoProfiles`, `mkNonoBox`, `nonocode`, and `nonoclaude`
 - a NixOS module that uses hjem to install the profiles into `~/.config/nono/profiles`
@@ -148,11 +148,10 @@ The sandboxed Claude starts with an empty config directory. Copy `~/.claude/CLAU
 ## Design notes
 
 - nono already has a `nix_runtime` group that reads `/nix/store`; it is not in `default`. The profile adds that group plus the daemon socket and Nix state.
-- bubblebox's empty `$HOME` maps to "grant only these paths". Landlock leaves the denied paths visible, unlike a mount namespace.
-- bubblebox hides `/run/user/$UID` by default. In nono, simply do not grant it. Landlock does not mediate `connect(2)` on AF_UNIX sockets, so add `linux.af_unix_mediation = "pathname"` to the profile if you want default-deny sockets, then list the ones you need.
-- bubblebox's tmpfs `/tmp` maps to the host `/tmp` read-write. `linux_temp_read` is required because tools such as Bun extract and `dlopen` shared libraries from `/tmp`.
-- bubblebox sanitizes `/etc/ssh` because bwrap maps only the invoking uid. nono does not unshare the uid, so the workaround is unnecessary.
-- bubblebox's `--rw`/`--ro` are already `-a`/`-r` in nono. The wrapper does not reimplement them.
+- The profiles grant only the host paths tools need. Landlock leaves denied paths visible, unlike a mount namespace.
+- `/run/user/$UID` is not granted by default. Landlock does not mediate `connect(2)` on AF_UNIX sockets, so add `linux.af_unix_mediation = "pathname"` to the profile if you want default-deny sockets, then list the ones you need.
+- `/tmp` is read-write. `linux_temp_read` is required because tools such as Bun extract and `dlopen` shared libraries from `/tmp`.
+- `--rw`/`--ro` are not reimplemented. nono already has `-a`/`-r`.
 - `nonocode` adds `--standalone` only for the TUI, `run`, and TUI flags. OpenCode subcommands such as `debug` reject the flag.
 
 ## Adding a wrapper
@@ -167,7 +166,7 @@ pkgs.mkNonoBox {
 }
 ```
 
-`homeDirs` are created under `$HOME` before nono starts. This is the equivalent of bubblebox's `homeBindings` creation. `nonoArgs` defaults to `["--allow-cwd"]`; `allowRepoRoot` defaults to `true`; `toolArgHook` is an escape hatch for arguments that depend on the tool's first argument.
+`homeDirs` are created under `$HOME` before nono starts. `nonoArgs` defaults to `["--allow-cwd"]`; `allowRepoRoot` defaults to `true`; `toolArgHook` is an escape hatch for arguments that depend on the tool's first argument.
 
 To add a package to this flake, add an entry under `packages` in `nix/wrapper.nix`.
 

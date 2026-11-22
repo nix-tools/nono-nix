@@ -13,6 +13,14 @@
       url = "github:numtide/treefmt-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    hk-nix = {
+      url = "github:nix-tools/hk-nix";
+      inputs.nixpkgs.follows = "nixpkgs";
+      inputs.flake-parts.follows = "flake-parts";
+      inputs.treefmt-nix.follows = "treefmt-nix";
+      inputs.import-tree.follows = "import-tree";
+    };
   };
 
   outputs =

@@ -11,11 +11,11 @@ The profiles are plain JSON in `profiles/`. The flake exposes:
 
 ## Profiles
 
-| Profile    | Extends   | Purpose |
+| Profile | Extends | Purpose |
 |------------|-----------|---------|
-| `nix-dev`  | `default` | Nix development base: host store, daemon, caches, git config |
+| `nix-dev` | `default` | Nix development base: host store, daemon, caches, git config |
 | `opencode` | `nix-dev` | OpenCode with a sandbox-private data, cache, and state directory |
-| `claude`   | `nix-dev` | Claude Code with a sandbox-private config, data, cache, and state |
+| `claude` | `nix-dev` | Claude Code with a sandbox-private config, data, cache, and state |
 
 `nix-dev` grants:
 
@@ -39,7 +39,7 @@ The agent profiles do not grant the host agent state. `opencode` sets `XDG_DATA_
 
 ```nix
 {
-  inputs.nono-nix.url = "github:sshine/nono-nix";
+  inputs.nono-nix.url = "github:nix-tools/nono-nix";
   inputs.nono-nix.inputs.nixpkgs.follows = "nixpkgs";
 }
 ```

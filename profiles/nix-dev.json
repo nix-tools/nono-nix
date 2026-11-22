@@ -1,0 +1,52 @@
+{
+  "$schema": "https://nono.sh/schemas/nono-profile.schema.json",
+  "extends": "default",
+  "meta": {
+    "name": "nix-dev",
+    "version": "1",
+    "description": "Nix development base: host store, daemon, caches, and git config"
+  },
+  "groups": {
+    "include": [
+      "nix_runtime",
+      "git_config",
+      "linux_temp_read"
+    ]
+  },
+  "workdir": {
+    "access": "readwrite"
+  },
+  "environment": {
+    "deny_vars": [
+      "*TOKEN*",
+      "*KEY*",
+      "*SECRET*",
+      "*PASSWORD*",
+      "*CREDENTIAL*",
+      "SSH_AUTH_SOCK",
+      "GPG_AGENT_INFO",
+      "DBUS_SESSION_BUS_ADDRESS",
+      "AI_AGENT",
+      "OPENCODE*",
+      "CLAUDE_CODE_*"
+    ]
+  },
+  "filesystem": {
+    "read": [
+      "/etc/nix",
+      "$HOME/.config/nix",
+      "$HOME/.config/direnv",
+      "$HOME/.config/gh/config.yml"
+    ],
+    "allow": [
+      "$HOME/.cache/nix",
+      "$HOME/.cache/direnv",
+      "$HOME/.local/share/nix",
+      "$HOME/.local/share/direnv",
+      "$HOME/.local/state/nix"
+    ],
+    "unix_socket": [
+      "/nix/var/nix/daemon-socket/socket"
+    ]
+  }
+}

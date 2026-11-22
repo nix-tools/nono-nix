@@ -1,0 +1,25 @@
+{
+  "$schema": "https://nono.sh/schemas/nono-profile.schema.json",
+  "extends": "nix-dev",
+  "meta": {
+    "name": "claude",
+    "version": "1",
+    "description": "Claude Code with sandbox-private config, data, cache, and state"
+  },
+  "environment": {
+    "set_vars": {
+      "CLAUDE_CONFIG_DIR": "$HOME/.local/share/nono-sandbox/claude",
+      "XDG_DATA_HOME": "$HOME/.local/share/nono-sandbox",
+      "XDG_CACHE_HOME": "$HOME/.cache/nono-sandbox",
+      "XDG_STATE_HOME": "$HOME/.local/state/nono-sandbox",
+      "DISABLE_AUTOUPDATER": "1"
+    }
+  },
+  "filesystem": {
+    "allow": [
+      "$HOME/.local/share/nono-sandbox",
+      "$HOME/.cache/nono-sandbox",
+      "$HOME/.local/state/nono-sandbox"
+    ]
+  }
+}

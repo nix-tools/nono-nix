@@ -1,0 +1,34 @@
+{
+  "$schema": "https://nono.sh/schemas/nono-profile.schema.json",
+  "extends": "nix-dev",
+  "meta": {
+    "name": "opencode",
+    "version": "1",
+    "description": "OpenCode with sandbox-private data, cache, and state"
+  },
+  "groups": {
+    "include": [
+      "opencode_linux"
+    ]
+  },
+  "environment": {
+    "set_vars": {
+      "XDG_DATA_HOME": "$HOME/.local/share/nono-sandbox",
+      "XDG_CACHE_HOME": "$HOME/.cache/nono-sandbox",
+      "XDG_STATE_HOME": "$HOME/.local/state/nono-sandbox",
+      "OPENCODE_CONFIG_DIR": "$HOME/.config/opencode",
+      "OPENCODE_DISABLE_AUTOUPDATE": "1"
+    }
+  },
+  "filesystem": {
+    "read": [
+      "$HOME/.config/opencode",
+      "$HOME/Projects/nursery/opencode-plugins"
+    ],
+    "allow": [
+      "$HOME/.local/share/nono-sandbox",
+      "$HOME/.cache/nono-sandbox",
+      "$HOME/.local/state/nono-sandbox"
+    ]
+  }
+}
